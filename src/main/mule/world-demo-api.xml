@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c5d57f37-79ae-45b8-ba0b-068d1e8bdd4b" >
-		<http:listener-connection host="0.0.0.0" port="8093" />
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:listener-config name="HTTPS_Listener_config" doc:name="HTTP Listener config" doc:id="c5d57f37-79ae-45b8-ba0b-068d1e8bdd4b" >
+		<http:listener-connection host="0.0.0.0" port="8082" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store path="ambimuletest.jks" alias="ambimule" keyPassword="Ammananna@9005" password="Ammananna@9005" />
+			</tls:context>
+		</http:listener-connection>
 	</http:listener-config>
 	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="4a592b5b-9ee3-4401-acb4-4e9553b2b982" basePath="/api/timezone" >
 		<http:request-connection host="worldtimeapi.org" />
 	</http:request-config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="bed582c2-f177-4c05-bae6-42b6b2c36b30" >
+		<http:listener-connection host="0.0.0.0" port="8091" />
+	</http:listener-config>
 	<flow name="world-demo-apiFlow" doc:id="8a030cfc-bac1-4f8c-b926-b4dcc9d5a5a4" >
 		<http:listener doc:name="Listener" doc:id="d271abb5-7c9b-40c4-8a43-af4d618d6dc4" config-ref="HTTP_Listener_config" path="/worlddemoapi/{region}/{city}"/>
 		<http:request method="GET" doc:name="Request" doc:id="cd0efb20-339a-44fc-a0df-38faa7c9cde0" config-ref="HTTP_Request_configuration" path="/{region}/{city}">
